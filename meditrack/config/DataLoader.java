@@ -3,8 +3,11 @@ package DesignPattern.meditrack.config;
 import DesignPattern.meditrack.constants.Specialization;
 import DesignPattern.meditrack.entity.Doctor;
 import DesignPattern.meditrack.entity.Patient;
+import DesignPattern.meditrack.entity.TimeSlot;
 import DesignPattern.meditrack.exception.InvalidDataException;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +21,30 @@ public class DataLoader {
         //Load Doctors
         System.out.println("Loading Data of Doctors");
         try {
-            Doctor doc1 = new Doctor(1, "Sumit", 35, "1111111111", "doc1@gmail.com", Specialization.DENTIST, 500);
-            Doctor doc2 = new Doctor(2, "Nilesh", 36, "1111111112", "doc2@gmail.com", Specialization.DERMATOLOGIST, 700);
-            Doctor doc3 = new Doctor(3, "Omkar", 25, "1111111113", "doc3@gmail.com", Specialization.CARDIOLOGIST, 1000);
+            LocalDate today = LocalDate.now();
+
+            Doctor doc1 = new Doctor(
+                    1, "Sumit", 35, "1111111111", "doc1@gmail.com",
+                    Specialization.DENTIST, 500,
+                    List.of(
+                            new TimeSlot(today, LocalTime.of(9, 0), LocalTime.of(10, 0)),
+                            new TimeSlot(today, LocalTime.of(11, 0), LocalTime.of(12, 0))
+                    )
+            );
+            Doctor doc2 = new Doctor(
+                    2, "Nilesh", 36, "1111111112", "doc2@gmail.com",
+                    Specialization.DERMATOLOGIST, 700,
+                    List.of(
+                            new TimeSlot(today, LocalTime.of(10, 0), LocalTime.of(11, 0))
+                    )
+            );
+            Doctor doc3 = new Doctor(
+                    3, "Omkar", 25, "1111111113", "doc3@gmail.com",
+                    Specialization.CARDIOLOGIST, 1000,
+                    List.of(
+                            new TimeSlot(today.plusDays(1), LocalTime.of(14, 0), LocalTime.of(15, 0))
+                    )
+            );
             DOCTORS.add(doc1);
             DOCTORS.add(doc2);
             DOCTORS.add(doc3);

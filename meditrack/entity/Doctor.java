@@ -5,12 +5,16 @@ import DesignPattern.meditrack.exception.InvalidDataException;
 import DesignPattern.meditrack.interfaces.Searchable;
 import DesignPattern.meditrack.util.Validator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Doctor
         extends Person
         implements Searchable<Doctor> {
 
     private Specialization specialization;
     private double consultationFee;
+    private List<TimeSlot> availableSlots = new ArrayList<>();
 
     public Doctor(
             int id,
@@ -19,7 +23,8 @@ public class Doctor
             String phone,
             String email,
             Specialization specialization,
-            double consultationFee
+            double consultationFee,
+            List<TimeSlot> availableSlots
     ) throws InvalidDataException {
 
         /*
@@ -35,6 +40,7 @@ public class Doctor
 
         setSpecialization(specialization);
         setConsultationFee(consultationFee);
+        setAvailableSlots(availableSlots);
     }
 
     public Specialization getSpecialization() {
@@ -43,6 +49,10 @@ public class Doctor
 
     public double getConsultationFee() {
         return consultationFee;
+    }
+
+    public List<TimeSlot> getAvailableSlots() {
+        return new ArrayList<>(availableSlots);
     }
 
     public void setSpecialization(
@@ -68,6 +78,28 @@ public class Doctor
         );
 
         this.consultationFee = consultationFee;
+    }
+
+    public void setAvailableSlots(List<TimeSlot> availableSlots) throws InvalidDataException {
+
+        if (availableSlots == null) {
+            throw new InvalidDataException("Available slots cannot be null.");
+        }
+
+        List<TimeSlot> copy = new ArrayList<>();
+        for (TimeSlot slot : availableSlots) {
+            addSlotTo(copy, slot);
+        }
+
+        this.availableSlots = copy;
+    }
+
+    public void addAvailableSlot(TimeSlot slot) throws InvalidDataException {
+        addSlotTo(availableSlots, slot);
+    }
+
+    public boolean removeAvailableSlot(TimeSlot slot) {
+        return availableSlots.remove(slot);
     }
 
     @Override
@@ -113,6 +145,15 @@ public class Doctor
                 "Consultation Fee : ₹"
                         + consultationFee
         );
+
+        System.out.println("Available Slots :");
+        if (availableSlots.isEmpty()) {
+            System.out.println("  None");
+        } else {
+            for (TimeSlot slot : availableSlots) {
+                System.out.println("  " + slot);
+            }
+        }
     }
 
     @Override
@@ -133,7 +174,23 @@ public class Doctor
                 ", specialization=" + specialization +
                 ", consultationFee=" +
                 consultationFee +
+                ", availableSlots=" +
+                availableSlots +
                 '}';
+    }
+
+    private void addSlotTo(List<TimeSlot> slots, TimeSlot slot) throws InvalidDataException {
+        if (slot == null) {
+            throw new InvalidDataException("Time slot cannot be null.");
+        }
+
+        for (TimeSlot existing : slots) {
+            if (existing.overlaps(slot)) {
+                throw new InvalidDataException("Time slot overlaps an existing slot: " + existing);
+            }
+        }
+
+        slots.add(slot);
     }
 
     @Override

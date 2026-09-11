@@ -3,12 +3,17 @@ package DesignPattern.meditrack;
 import DesignPattern.meditrack.constants.Specialization;
 import DesignPattern.meditrack.entity.Doctor;
 import DesignPattern.meditrack.entity.Patient;
+import DesignPattern.meditrack.entity.TimeSlot;
 import DesignPattern.meditrack.exception.InvalidDataException;
 import DesignPattern.meditrack.exception.ResourceNotFoundException;
 import DesignPattern.meditrack.service.DoctorService;
 import DesignPattern.meditrack.service.PatientService;
 import DesignPattern.meditrack.util.IdGenerator;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -157,7 +162,8 @@ public class MeditrackApplication {
                 readString("Phone: "),
                 readString("Email: "),
                 readSpecialization(),
-                readDouble("Consultation Fee: ")
+                readDouble("Consultation Fee: "),
+                readAvailableSlots()
         );
         doctorService.createDoctor(doctor);
         doctor.displayInfo();
@@ -285,6 +291,48 @@ public class MeditrackApplication {
                 return specializations[choice - 1];
             }
             System.out.println("Invalid choice. Please select again.");
+        }
+    }
+
+    private static List<TimeSlot> readAvailableSlots()
+            throws InvalidDataException {
+
+        int count = readInt("Number of available slots (0 if none): ");
+        if (count < 0) {
+            throw new InvalidDataException(
+                    "Slot count cannot be negative."
+            );
+        }
+
+        List<TimeSlot> slots = new ArrayList<>();
+        for (int i = 1; i <= count; i++) {
+            System.out.println("\nSlot " + i + ":");
+            slots.add(new TimeSlot(
+                    readDate("Date (yyyy-MM-dd): "),
+                    readTime("Start time (HH:mm): "),
+                    readTime("End time (HH:mm): ")
+            ));
+        }
+        return slots;
+    }
+
+    private static LocalDate readDate(String message) {
+        while (true) {
+            try {
+                return LocalDate.parse(readString(message));
+            } catch (DateTimeParseException e) {
+                System.out.println("Please enter a valid date (yyyy-MM-dd).");
+            }
+        }
+    }
+
+    private static LocalTime readTime(String message) {
+        while (true) {
+            try {
+                return LocalTime.parse(readString(message));
+            } catch (DateTimeParseException e) {
+                System.out.println("Please enter a valid time (HH:mm).");
+            }
         }
     }
 }
