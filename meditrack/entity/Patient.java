@@ -12,7 +12,7 @@ public class Patient
     private String medicalHistory;
 
     public Patient(
-            String id,
+            int id,
             String name,
             int age,
             String phone,
@@ -85,8 +85,7 @@ public class Patient
         String search =
                 keyword.trim().toLowerCase();
 
-        return getId()
-                .toLowerCase()
+        return String.valueOf(getId())
                 .contains(search)
 
                 || getName()
@@ -103,10 +102,9 @@ public class Patient
     }
 
 
-    public boolean searchPatient(String id) {
+    public boolean searchPatient(int id) {
 
-        return getId()
-                .equalsIgnoreCase(id);
+        return getId() == id;
     }
 
     public boolean searchPatientByName(
@@ -204,12 +202,12 @@ public class Patient
 
         Patient other = (Patient) obj;
 
-        return getId().equals(other.getId());
+        return getId() == other.getId();
     }
 
     @Override
     public int hashCode() {
 
-        return getId().hashCode();
+        return Integer.hashCode(getId());
     }
 }

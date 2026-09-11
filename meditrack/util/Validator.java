@@ -62,16 +62,6 @@ public final class Validator {
         }
     }
 
-    public static void validateId(String id)
-            throws InvalidDataException {
-
-        if (id == null || id.trim().isEmpty()) {
-            throw new InvalidDataException(
-                    "ID cannot be empty."
-            );
-        }
-    }
-
     public static void validatePositiveAmount(double amount)
             throws InvalidDataException {
 
