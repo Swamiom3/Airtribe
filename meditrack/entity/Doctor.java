@@ -13,7 +13,7 @@ public class Doctor
     private double consultationFee;
 
     public Doctor(
-            String id,
+            int id,
             String name,
             int age,
             String phone,
@@ -82,8 +82,7 @@ public class Doctor
         String search =
                 keyword.trim().toLowerCase();
 
-        return getId()
-                .toLowerCase()
+        return String.valueOf(getId())
                 .contains(search)
 
                 || getName()
@@ -150,12 +149,12 @@ public class Doctor
 
         Doctor other = (Doctor) obj;
 
-        return getId().equals(other.getId());
+        return getId() == other.getId();
     }
 
     @Override
     public int hashCode() {
 
-        return getId().hashCode();
+        return Integer.hashCode(getId());
     }
 }
