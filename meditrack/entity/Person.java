@@ -8,7 +8,7 @@ public abstract class Person {
      * Encapsulation:
      * All fields are private.
      */
-    private final String id;
+    private final int id;
 
     private String name;
     private int age;
@@ -22,14 +22,14 @@ public abstract class Person {
      * parent class and should not be directly created.
      */
     protected Person(
-            String id,
+            int id,
             String name,
             int age,
             String phone,
             String email
     ) throws InvalidDataException {
 
-        Validator.validateId(id);
+//        Validator.validateId(id);
         Validator.validateName(name);
         Validator.validateAge(age);
         Validator.validatePhone(phone);
@@ -46,7 +46,7 @@ public abstract class Person {
     // GETTERS
     // =========================
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -156,14 +156,11 @@ public abstract class Person {
             return false;
         }
 
-        Person other = (Person) obj;
-
-        return id.equals(other.id);
+        return this.id == ((Person) obj).getId();
     }
 
     @Override
     public int hashCode() {
-
-        return id.hashCode();
+        return Integer.hashCode(this.id);
     }
 }
